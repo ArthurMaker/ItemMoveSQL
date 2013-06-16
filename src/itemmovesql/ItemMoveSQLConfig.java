@@ -14,6 +14,7 @@ public class ItemMoveSQLConfig {
 	protected String pass = "password";
 	protected int maxitems = 5;
 	protected boolean checkdb = true;
+	protected int maxthreads = 8;
 
 	public void load() {
 		FileConfiguration config = YamlConfiguration

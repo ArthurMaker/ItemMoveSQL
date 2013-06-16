@@ -21,7 +21,7 @@ public class DBUtils {
 		return InitConnection();
 	}
 
-	public void CreateNeeded() {
+	public void createNeededTable() {
 		Connection connection = null;
 		try {
 			if (config.checkdb) {
