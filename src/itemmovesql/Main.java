@@ -1,5 +1,7 @@
 ﻿package itemmovesql;
 
+import java.util.concurrent.TimeUnit;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {
@@ -21,7 +23,13 @@ public class Main extends JavaPlugin {
 	}
 
 	public void onDisable() {
-
+		executor.DBexecutor.shutdown();
+		try {
+			executor.DBexecutor.awaitTermination(1, TimeUnit.MINUTES);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		config.save();
 	}
 
 

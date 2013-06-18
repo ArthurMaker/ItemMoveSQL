@@ -25,13 +25,21 @@ public class ItemMoveSQLConfig {
 		pass = config.getString("mysql.password", pass);
 		checkdb = config.getBoolean("mysql.checkdb", checkdb);
 		maxitems = config.getInt("items.max", maxitems);
+		maxthreads = config.getInt("mysql.maxparallelrequests", maxthreads);
 
+		save();
+	}
+	
+	public void save()
+	{
+		FileConfiguration config = new YamlConfiguration();
 		config.set("mysql.address", address);
 		config.set("mysql.dbname", dbname);
 		config.set("mysql.login", login);
 		config.set("mysql.password", pass);
 		config.set("mysql.checkdb", checkdb);
 		config.set("items.max", maxitems);
+		config.set("mysql.maxparallelrequests", maxthreads);
 
 		try {
 			config.save(new File("plugins/ItemMoveSQL/config.yml"));
@@ -39,6 +47,5 @@ public class ItemMoveSQLConfig {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 }

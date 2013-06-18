@@ -40,8 +40,15 @@ public class DBUtils {
 			st.executeUpdate("CREATE TABLE IF NOT EXISTS itemstorage"
 					+ "("
 					+ "keyint int unsigned not null auto_increment primary key,"
-					+ "playername varchar(255)," + "itemid int,"
-					+ "itemsubid int," + "amount int" + ");");
+					+ "playername varchar(255),"
+					+ "itemid int,"
+					+ "itemsubid int,"
+					+ "amount int,"
+					+ "enchants text,"
+					+ "lore text,"
+					+ "displayname text"
+					+ ");"
+					);
 			st.close();
 			log.info("[ItemMoveMSQL] Connected to mysql server and database");
 			connection.close();
