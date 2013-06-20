@@ -18,10 +18,11 @@ public class QueueExecutor {
 	public ExecutorService DBexecutor;
 	Main main;
 	DBUtils dbutils;
-	ItemMoveSQLConfig config;
+	Config config;
+	ItemsGuiView igv;
 	
 	
-	public QueueExecutor(Main main, ItemMoveSQLConfig config, DBUtils dbutils)
+	public QueueExecutor(Main main, Config config, DBUtils dbutils, ItemsGuiView igv)
 	{
 	DBexecutor = new ThreadPoolExecutor(config.maxthreads, config.maxthreads, 1, TimeUnit.MILLISECONDS,
 			new ArrayBlockingQueue<Runnable>(config.maxthreads, true),
@@ -30,6 +31,7 @@ public class QueueExecutor {
 	this.main = main;
 	this.dbutils = dbutils;
 	this.config = config;
+	this.igv = igv;
 	}
 	
 	//cmd
@@ -231,21 +233,11 @@ public class QueueExecutor {
 					Connection conn = dbutils.getConenction();
 					st = conn.createStatement();
 					ResultSet result = st
-							.executeQuery("SELECT keyint, itemid, itemsubid, amount FROM itemstorage WHERE playername = '"
+							.executeQuery("SELECT playername, itemid, itemsubid, amount, enchants, lore, displayname, keyint FROM itemstorage WHERE playername = '"
 									+ playername
 									+ "'"
 									);
-					while (result.next()) {
-						Bukkit.getPlayerExact(playername).sendMessage("[ItemMoveSQL]Номер вещи в БД "
-								+ result.getInt(1)
-								+ " id вещи: "
-								+ result.getInt(2)
-								+ " subid/прочность вещи: "
-								+ result.getInt(3)
-								+ " количество вещей: "
-								+ result.getInt(4)
-								);
-					}
+					igv.openGuiContainer(playername,result);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

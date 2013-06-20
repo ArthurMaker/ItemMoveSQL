@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class ItemMoveSQLConfig {
+public class Config {
 
 	protected String address = "jdbc:mysql://localhost/";
 	protected String dbname = "itemmovesqldb";

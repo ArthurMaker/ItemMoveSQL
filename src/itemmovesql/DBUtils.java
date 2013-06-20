@@ -9,9 +9,9 @@ import org.bukkit.Bukkit;
 
 public class DBUtils {
 
-	private ItemMoveSQLConfig config;
+	private Config config;
 
-	DBUtils(Main main, ItemMoveSQLConfig config) {
+	DBUtils(Main main, Config config) {
 		this.config = config;
 	}
 
