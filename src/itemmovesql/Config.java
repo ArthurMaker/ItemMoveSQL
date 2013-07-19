@@ -32,6 +32,7 @@ public class Config {
 	protected int maxitems = 5;
 	protected boolean checkdb = true;
 	protected int maxthreads = 8;
+	
 
 	public void load() {
 		FileConfiguration config = YamlConfiguration
@@ -60,6 +61,25 @@ public class Config {
 
 		try {
 			config.save(new File("plugins/ItemMoveSQL/config.yml"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	public void loadMSG() {
+		FileConfiguration config = YamlConfiguration
+				.loadConfiguration(new File("plugins/ItemMoveSQL/configmsg.yml"));
+		save();
+	}
+	
+	public void saveMSG()
+	{
+		FileConfiguration config = new YamlConfiguration();
+		
+		try {
+			config.save(new File("plugins/ItemMoveSQL/configmsg.yml"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

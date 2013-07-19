@@ -102,9 +102,18 @@ public class QueueExecutor {
 			enchants = "none";
 		}
 		//lore
+		String l;
 		final String lore;
 		if (iteminhand.getItemMeta().hasLore()) {
-			lore = InvConstructUtils.LoreToString(iteminhand);
+			l = InvConstructUtils.LoreToString(iteminhand);
+       	 	l = l.replaceAll("\\\\", "\\\\\\\\");
+       	 	l = l.replaceAll("\\n","\\\\n");
+       	 	l = l.replaceAll("\\r", "\\\\r");
+       	 	l = l.replaceAll("\\t", "\\\\t");
+       	 	l = l.replaceAll("\\00", "\\\\0");
+       	 	l = l.replaceAll("'", "\\\\'");
+       	 	l = l.replaceAll("\\\"", "\\\\\"");
+       	 	lore = l;
 		} 
 		else {
 			lore = "none";
@@ -121,11 +130,11 @@ public class QueueExecutor {
 	        	 dispname = dispname.replaceAll("\\00", "\\\\0");
 	        	 dispname = dispname.replaceAll("'", "\\\\'");
 	        	 dispname = dispname.replaceAll("\\\"", "\\\\\"");
+	             displayname = dispname;
 		}
 		else {
-			dispname = "none";
+			displayname = "none";
 		}
-        displayname = dispname;
 		
 		
         //create runnable
