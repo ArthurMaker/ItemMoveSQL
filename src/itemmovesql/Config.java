@@ -66,23 +66,5 @@ public class Config {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	public void loadMSG() {
-		FileConfiguration config = YamlConfiguration
-				.loadConfiguration(new File("plugins/ItemMoveSQL/configmsg.yml"));
-		save();
-	}
-	
-	public void saveMSG()
-	{
-		FileConfiguration config = new YamlConfiguration();
-		
-		try {
-			config.save(new File("plugins/ItemMoveSQL/configmsg.yml"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 }

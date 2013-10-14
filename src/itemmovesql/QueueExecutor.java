@@ -87,56 +87,8 @@ public class QueueExecutor {
 	//operation
 	private void addItemToDB(final String playername, final ItemStack iteminhand)
 	{
-		//item id
-		final int itemid = iteminhand.getTypeId();
-		//item subid
-		final int subdurabid = iteminhand.getDurability();
-		//amount
-		final int amount = iteminhand.getAmount();
-		//enchants
-		final String enchants;
-		if (iteminhand.getItemMeta().hasEnchants()) {
-			enchants = InvConstructUtils.EnchantmentsToString(iteminhand);
-		} 
-		else {
-			enchants = "none";
-		}
-		//lore
-		String l;
-		final String lore;
-		if (iteminhand.getItemMeta().hasLore()) {
-			l = InvConstructUtils.LoreToString(iteminhand);
-       	 	l = l.replaceAll("\\\\", "\\\\\\\\");
-       	 	l = l.replaceAll("\\n","\\\\n");
-       	 	l = l.replaceAll("\\r", "\\\\r");
-       	 	l = l.replaceAll("\\t", "\\\\t");
-       	 	l = l.replaceAll("\\00", "\\\\0");
-       	 	l = l.replaceAll("'", "\\\\'");
-       	 	l = l.replaceAll("\\\"", "\\\\\"");
-       	 	lore = l;
-		} 
-		else {
-			lore = "none";
-		}
-		//displayname
-		String dispname;
-        final String displayname;
-		if (iteminhand.getItemMeta().hasDisplayName()) {
-			dispname =  iteminhand.getItemMeta().getDisplayName();
-	        	 dispname = dispname.replaceAll("\\\\", "\\\\\\\\");
-	        	 dispname = dispname.replaceAll("\\n","\\\\n");
-	        	 dispname = dispname.replaceAll("\\r", "\\\\r");
-	        	 dispname = dispname.replaceAll("\\t", "\\\\t");
-	        	 dispname = dispname.replaceAll("\\00", "\\\\0");
-	        	 dispname = dispname.replaceAll("'", "\\\\'");
-	        	 dispname = dispname.replaceAll("\\\"", "\\\\\"");
-	             displayname = dispname;
-		}
-		else {
-			displayname = "none";
-		}
-		
-		
+		//serialize item
+		final String item = InvConstructUtils.ItemStackToString(iteminhand);
         //create runnable
 		Runnable additemtodb = new Runnable() {
 			@Override
@@ -152,20 +104,10 @@ public class QueueExecutor {
 					int curiam = result.getInt(1);
 					result.close();
 					if (curiam < config.maxitems) {
-						st.executeUpdate("INSERT INTO itemstorage (playername, itemid, itemsubid, amount, enchants, lore, displayname) VALUES ('"
+						st.executeUpdate("INSERT INTO itemstorage (playername, item) VALUES ('"
 								+ playername
 								+ "', '"
-								+ itemid
-								+ "', '"
-								+ subdurabid
-								+ "', '"
-								+ amount
-								+ "', '"
-								+ enchants
-								+ "', '"
-								+ lore
-								+ "', '"
-								+ displayname
+								+ item
 								+ "')"
 								);
 						Bukkit.getPlayerExact(playername).sendMessage("[ItemMoveSQL] Предмет успешно добавлен в базу");
@@ -203,14 +145,14 @@ public class QueueExecutor {
 							ResultSet.TYPE_SCROLL_SENSITIVE,
 							ResultSet.CONCUR_UPDATABLE);
 					ResultSet result = st
-							.executeQuery("SELECT keyint ,itemid, itemsubid, amount, enchants, lore, displayname FROM itemstorage WHERE playername = '"
+							.executeQuery("SELECT item, keyint FROM itemstorage WHERE playername = '"
 									+ playername
 									+ "' AND keyint = "
 									+ keyint
 									);
 					if (result.next()) {
 						//construct item
-						ItemStack itemtogive = InvConstructUtils.ResultSetToItemStack(result);
+						ItemStack itemtogive = InvConstructUtils.StringToItemStack(result.getString(1));
 						result.deleteRow();
 						result.close();
 						conn.close();
@@ -259,7 +201,7 @@ public class QueueExecutor {
 					Connection conn = dbutils.getConenction();
 					st = conn.createStatement();
 					ResultSet result = st
-							.executeQuery("SELECT playername, itemid, itemsubid, amount, enchants, lore, displayname, keyint FROM itemstorage WHERE playername = '"
+							.executeQuery("SELECT item, keyint FROM itemstorage WHERE playername = '"
 									+ playername
 									+ "'"
 									);

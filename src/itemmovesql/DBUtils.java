@@ -58,12 +58,7 @@ public class DBUtils {
 					+ "("
 					+ "keyint int unsigned not null auto_increment primary key,"
 					+ "playername varchar(255),"
-					+ "itemid int,"
-					+ "itemsubid int,"
-					+ "amount int,"
-					+ "enchants text,"
-					+ "lore text,"
-					+ "displayname text"
+					+ "item text"
 					+ ");"
 					);
 			st.close();
@@ -71,7 +66,6 @@ public class DBUtils {
 			connection.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -85,7 +79,6 @@ public class DBUtils {
 
 			return connection;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

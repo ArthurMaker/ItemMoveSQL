@@ -55,30 +55,28 @@ public class ItemsGuiView implements Listener {
 			public void run()
 			{
 				try {
-				String pl = player;
-				Inventory guidb = Bukkit.getServer().createInventory(null, 27, ChatColor.BLUE+"Your items in database");
-				//add items to virtual inventory
-				while (rs.next())
-				{
-					ItemStack showi = InvConstructUtils.ResultSetToItemStack(rs);
-					ItemMeta im = showi.getItemMeta();
-					List<String> lore = null;
-					if (im.hasLore()) {
-					lore = im.getLore();
-					} else {
-						lore = new ArrayList<String>();
+					String pl = player;
+					Inventory guidb = Bukkit.getServer().createInventory(null, 27, ChatColor.BLUE+"Your items in database");
+					//add items to virtual inventory
+					while (rs.next())
+					{
+						ItemStack showi = InvConstructUtils.StringToItemStack(rs.getString(1));
+						ItemMeta im = showi.getItemMeta();
+						List<String> lore = new ArrayList<String>();
+						if (im.hasLore()) {
+							lore = im.getLore();
+						}
+						lore.add(ChatColor.BLUE+"==IMSQL info==");
+						lore.add(ChatColor.BLUE+"/imsql get "+rs.getInt(2));
+						im.setLore(lore);
+						showi.setItemMeta(im);
+						guidb.addItem(showi);
 					}
-					lore.add(ChatColor.BLUE+"==IMSQL info==");
-					lore.add(ChatColor.BLUE+"/imsql get "+rs.getInt(8));
-					im.setLore(lore);
-					showi.setItemMeta(im);
-					guidb.addItem(showi);
-				}
-				//openinventory
-				InventoryView iv = Bukkit.getPlayerExact(pl).openInventory(guidb);
-				playerGuiInv.put(pl, iv);
+					//openinventory
+					InventoryView iv = Bukkit.getPlayerExact(pl).openInventory(guidb);
+					playerGuiInv.put(pl, iv);
 				} catch (Exception e) {
-				e.printStackTrace();
+					e.printStackTrace();
 				}
 			}
 		});
