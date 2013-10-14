@@ -18,8 +18,8 @@
 package itemmovesql;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -94,22 +94,20 @@ public class QueueExecutor {
 			@Override
 			public void run() {
 				try {
-					Statement st;
 					Connection conn = dbutils.getConenction();
-					st = conn.createStatement();
-					ResultSet result = st
-							.executeQuery("SELECT COUNT(keyint) FROM itemstorage WHERE playername = '"
-									+ playername + "'");
+					String statementstring = "SELECT COUNT(keyint) FROM itemstorage WHERE playername = ?";
+					PreparedStatement st = conn.prepareStatement(statementstring);
+					st.setString(1, playername);
+					ResultSet result = st.executeQuery();
 					result.next();
 					int curiam = result.getInt(1);
 					result.close();
 					if (curiam < config.maxitems) {
-						st.executeUpdate("INSERT INTO itemstorage (playername, item) VALUES ('"
-								+ playername
-								+ "', '"
-								+ item
-								+ "')"
-								);
+						statementstring = "INSERT INTO itemstorage (playername, item) VALUES (?,?)";
+						st = conn.prepareStatement(statementstring);
+						st.setString(1, playername);
+						st.setString(2, item);
+						st.executeUpdate();
 						Bukkit.getPlayerExact(playername).sendMessage("[ItemMoveSQL] Предмет успешно добавлен в базу");
 						st.close();
 					} else {
@@ -139,17 +137,12 @@ public class QueueExecutor {
 			@Override
 			public void run() {
 				try {
-					Statement st;
 					Connection conn = dbutils.getConenction();
-					st = conn.createStatement(
-							ResultSet.TYPE_SCROLL_SENSITIVE,
-							ResultSet.CONCUR_UPDATABLE);
-					ResultSet result = st
-							.executeQuery("SELECT item, keyint FROM itemstorage WHERE playername = '"
-									+ playername
-									+ "' AND keyint = "
-									+ keyint
-									);
+					String statementstring = "SELECT item, keyint FROM itemstorage WHERE playername = ? AND keyint = ?";
+					PreparedStatement st = conn.prepareStatement(statementstring,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+					st.setString(1, playername);
+					st.setLong(2, keyint);
+					ResultSet result = st.executeQuery();
 					if (result.next()) {
 						//construct item
 						ItemStack itemtogive = InvConstructUtils.StringToItemStack(result.getString(1));
@@ -197,14 +190,11 @@ public class QueueExecutor {
 			@Override
 			public void run() {
 				try {
-					Statement st;
 					Connection conn = dbutils.getConenction();
-					st = conn.createStatement();
-					ResultSet result = st
-							.executeQuery("SELECT item, keyint FROM itemstorage WHERE playername = '"
-									+ playername
-									+ "'"
-									);
+					String statementstring = "SELECT item, keyint FROM itemstorage WHERE playername = ?";
+					PreparedStatement st = conn.prepareStatement(statementstring);
+					st.setString(1, playername);
+					ResultSet result = st.executeQuery();
 					igv.openGuiContainer(playername,result);
 				} catch (Exception e) {
 					e.printStackTrace();

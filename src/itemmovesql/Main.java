@@ -27,7 +27,7 @@ public class Main extends JavaPlugin {
 	private Config config;
 	private Commands commands;
 	private QueueExecutor executor;
-	ItemsGuiView guiview;
+	private ItemsGuiView guiview;
 
 	public void onEnable() {
 		config = new Config();
