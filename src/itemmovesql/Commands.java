@@ -31,14 +31,15 @@ public class Commands  implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String cl,
-			String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String cl, String[] args) 
+	{
 		String cname = command.getName();
 		final Player player;
 		if (sender instanceof Player) {
 			player = (Player) sender;
 		} else {
-			return false;
+			sender.sendMessage("Данные комманды недоступны в консоли");
+			return true;
 		}
 		if (cname.equalsIgnoreCase("imsql")) {
 			if (args.length == 1 && args[0].equalsIgnoreCase("add")) {
@@ -50,11 +51,19 @@ public class Commands  implements CommandExecutor {
 			} else if (args.length == 2 && args[0].equalsIgnoreCase("get")) {
 				executor.CommandGet(player, args);
 				return true;
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
+				viewHelp(player);
 			}
 
 		}
 		return false;
 	}
 
+	private void viewHelp(Player player)
+	{
+		player.sendMessage("[ItemMoveSQL] /imsql add - положить предмет в БД");
+		player.sendMessage("[ItemMoveSQL] /imsql get {номер} - получить вещь из БД");
+		player.sendMessage("[ItemMoveSQL] /imsql view - посмотреть свои вещи в БД");
+	}
 
 }
