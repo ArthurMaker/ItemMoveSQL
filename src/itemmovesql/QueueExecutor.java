@@ -45,14 +45,14 @@ public class QueueExecutor {
 	
 	public QueueExecutor(Main main, Config config, DBUtils dbutils, ItemsGuiView igv)
 	{
-	DBexecutor = new ThreadPoolExecutor(config.maxthreads, config.maxthreads, 1, TimeUnit.MILLISECONDS,
+		DBexecutor = new ThreadPoolExecutor(config.maxthreads, config.maxthreads, 1, TimeUnit.MILLISECONDS,
 			new ArrayBlockingQueue<Runnable>(config.maxthreads, true),
 			new ThreadPoolExecutor.CallerRunsPolicy()
-			);
-	this.main = main;
-	this.dbutils = dbutils;
-	this.config = config;
-	this.igv = igv;
+		);
+		this.main = main;
+		this.dbutils = dbutils;
+		this.config = config;
+		this.igv = igv;
 	}
 	
 	//cmd
@@ -67,15 +67,12 @@ public class QueueExecutor {
 		} else {
 			player.sendMessage("[ItemMoveSQL] Нельзя добавлять пустой итем в базу");
 		}
-
 	}
 
 	//cmd
 	public void CommandView(final Player player, String[] args) {
-		player.sendMessage("[ItemMoveSQL] Выполняем запрос на просмотр вещей");
-		
+		player.sendMessage("[ItemMoveSQL] Выполняем запрос на просмотр вещей");	
 		viewItems(player.getName());
-
 	}
 
 	//cmd
@@ -130,7 +127,6 @@ public class QueueExecutor {
 		};
 		//add to executor
 		DBexecutor.submit(additemtodb);
-
 	}
 	
 	
