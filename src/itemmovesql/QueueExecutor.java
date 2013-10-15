@@ -20,15 +20,19 @@ package itemmovesql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class QueueExecutor {
 
@@ -195,7 +199,22 @@ public class QueueExecutor {
 					PreparedStatement st = conn.prepareStatement(statementstring);
 					st.setString(1, playername);
 					ResultSet result = st.executeQuery();
-					igv.openGuiContainer(playername,result);
+					List<ItemStack> items = new ArrayList<ItemStack>();
+					while (result.next())
+					{
+						ItemStack showi = InvConstructUtils.StringToItemStack(result.getString(1));
+						ItemMeta im = showi.getItemMeta();
+						List<String> lore = new ArrayList<String>();
+						if (im.hasLore()) {
+							lore = im.getLore();
+						}
+						lore.add(ChatColor.BLUE+"==IMSQL info==");
+						lore.add(ChatColor.BLUE+"/imsql get "+result.getInt(2));
+						im.setLore(lore);
+						showi.setItemMeta(im);
+						items.add(showi);
+					}
+					igv.openGuiContainer(playername,items);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
