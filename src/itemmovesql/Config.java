@@ -27,6 +27,8 @@ public class Config {
 
 	protected String address = "jdbc:mysql://localhost/";
 	protected String dbname = "itemmovesqldb";
+	protected String dbtable = "itemstorage";
+	protected String server = "serverid";
 	protected String login = "root";
 	protected String pass = "password";
 	protected int maxitems = 5;
@@ -39,6 +41,8 @@ public class Config {
 				.loadConfiguration(new File("plugins/ItemMoveSQL/config.yml"));
 		address = config.getString("mysql.address", address);
 		dbname = config.getString("mysql.dbname", dbname);
+		dbtable = config.getString("mysql.dbtable", dbtable);
+		server = config.getString("mysql.server", server);
 		login = config.getString("mysql.login", login);
 		pass = config.getString("mysql.password", pass);
 		checkdb = config.getBoolean("mysql.checkdb", checkdb);
@@ -53,6 +57,8 @@ public class Config {
 		FileConfiguration config = new YamlConfiguration();
 		config.set("mysql.address", address);
 		config.set("mysql.dbname", dbname);
+		config.set("mysql.dbtable", dbtable);
+		config.set("mysql.server", server);
 		config.set("mysql.login", login);
 		config.set("mysql.password", pass);
 		config.set("mysql.checkdb", checkdb);
