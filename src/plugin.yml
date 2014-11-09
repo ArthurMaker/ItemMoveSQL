@@ -1,6 +1,6 @@
 name: ItemMoveSQL
 main: itemmovesql.Main
-version: 2.0.dev
+version: 3.0.dev
 author: [Shevchik, ptnkjke]
 load: STARTUP
 commands:
