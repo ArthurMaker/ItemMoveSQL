@@ -96,18 +96,20 @@ public class QueueExecutor {
 			public void run() {
 				try {
 					Connection conn = dbutils.getConenction();
-					String statementstring = "SELECT COUNT(keyint) FROM itemstorage WHERE playername = ?";
+					String statementstring = "SELECT COUNT(keyint) FROM `" + config.dbtable + "` WHERE playername = ? AND `server` = ?";
 					PreparedStatement st = conn.prepareStatement(statementstring);
 					st.setString(1, playername);
+                                        st.setString(2, config.server);
 					ResultSet result = st.executeQuery();
 					result.next();
 					int curiam = result.getInt(1);
 					result.close();
 					if (curiam < config.maxitems) {
-						statementstring = "INSERT INTO itemstorage (playername, item) VALUES (?,?)";
+						statementstring = "INSERT INTO `" + config.dbtable + "` (playername, item, `server`) VALUES (?,?,?)";
 						st = conn.prepareStatement(statementstring);
 						st.setString(1, playername);
 						st.setString(2, item);
+						st.setString(3, config.server);
 						st.executeUpdate();
 						Bukkit.getPlayerExact(playername).sendMessage("[ItemMoveSQL] Предмет успешно добавлен в базу");
 						st.close();
@@ -138,10 +140,11 @@ public class QueueExecutor {
 			public void run() {
 				try {
 					Connection conn = dbutils.getConenction();
-					String statementstring = "SELECT item, keyint FROM itemstorage WHERE playername = ? AND keyint = ?";
+					String statementstring = "SELECT item, keyint FROM `" + config.dbtable + "` WHERE playername = ? AND keyint = ? AND `server` = ?";
 					PreparedStatement st = conn.prepareStatement(statementstring,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 					st.setString(1, playername);
 					st.setLong(2, keyint);
+                                        st.setString(3, config.server);
 					ResultSet result = st.executeQuery();
 					if (result.next()) {
 						//construct item
@@ -191,9 +194,10 @@ public class QueueExecutor {
 			public void run() {
 				try {
 					Connection conn = dbutils.getConenction();
-					String statementstring = "SELECT item, keyint FROM itemstorage WHERE playername = ?";
+					String statementstring = "SELECT item, keyint FROM `" + config.dbtable + "` WHERE playername = ? AND `server` = ?";
 					PreparedStatement st = conn.prepareStatement(statementstring);
 					st.setString(1, playername);
+					st.setString(2, config.server);
 					ResultSet result = st.executeQuery();
 					List<ItemStack> items = new ArrayList<ItemStack>();
 					while (result.next())
