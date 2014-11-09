@@ -54,11 +54,12 @@ public class DBUtils {
 			connection = DriverManager.getConnection(config.address
 					+ config.dbname, config.login, config.pass);
 			Statement st = connection.createStatement();
-			st.executeUpdate("CREATE TABLE IF NOT EXISTS itemstorage"
+			st.executeUpdate("CREATE TABLE IF NOT EXISTS `" + config.dbtable + "`"
 					+ "("
 					+ "keyint int unsigned not null auto_increment primary key,"
 					+ "playername varchar(255),"
-					+ "item text"
+					+ "item text,"
+                                        + "server varchar(64)"
 					+ ");"
 					);
 			st.close();
